@@ -27,25 +27,42 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if args.method == 'train':
+        '''
+        use dhandle to load datasets and do trainning
+        '''
+        # construct a 'dhandle' obj
         data_handle = dhandle()
+        # try to load dataset
         if data_handle.load(args.config) is False:
             print("config file not exist({})!!!\n\n".format(args.config))
             parser.print_help()
             exit(-1)
+        # training
         data_handle.train()
-        data_handle.printInfo()
-
         # use pickle caching obj to a file
         with open('./.cache', 'wb+') as f:
             pickle.dump(data_handle, f, pickle.HIGHEST_PROTOCOL)
+        # print related info
+        data_handle.printInfo()
     else :
+        '''
+        try to load 'dhandle' obj from cache file
+        check if 'dhandle' obj already cached firstly
+        if not, warning the user and exit
+        '''
         if os.path.exists('./.cache') is False:
             print('must train first!!!')
             exit(-1)
-
         with open('./.cache', 'rb') as f:
             data_handle = pickle.load(f)
+        
+        '''
+        start a QT GUI
+        '''
         app = QApplication(sys.argv)
+        # get source cols from 'dhandle' obj
         parameter_list = data_handle.parameter_names()
+        # use lambda to construct a class method to be a normal function method
         window = MainWindow(parameter_list, lambda p: data_handle.predict(p))
+        # wait for exiting
         sys.exit(app.exec_())

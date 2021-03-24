@@ -2,13 +2,15 @@ from PyQt5.QtWidgets import *
 import numpy as np
 import sys
 
+
 class InputItem(QWidget):
     '''
     a Item like: '[Label]   [InputBox]'
     Use QWidget to bind many widgets together
     see https://blog.csdn.net/qq_38641985/article/details/83377355
     '''
-    def __init__(self, label = "unknow"):
+
+    def __init__(self, label="unknow"):
         super().__init__()
 
         # use BoxLayout to put item in right position automatically
@@ -50,7 +52,7 @@ class InputItem(QWidget):
             '''
             QMessageBox().warning(self, "warning", "{} is not a number".format(self.get_label()))
             return None
-        
+
 
 class MainWindow(QWidget):
     def __init__(self, input_list=None, predict_func=None):

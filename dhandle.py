@@ -10,12 +10,14 @@ import matplotlib.pyplot as plt
 from os import error, path
 import json
 
+
 def isNaN(n):
     '''
     check number(float type) is NaN
     see https://blog.csdn.net/acbattle/article/details/88583128
     '''
     return n != n
+
 
 class dhandle:
     def __init__(self):
@@ -58,7 +60,8 @@ class dhandle:
         cols = []
         col_list = [item for item in data]
         if config['target'] not in col_list:
-            print('target({}) not in col_list({})'.format(config['target'], col_list))
+            print('target({}) not in col_list({})'.format(
+                config['target'], col_list))
             return False
 
         '''
@@ -100,7 +103,7 @@ class dhandle:
         self.__target = data[data.columns[target_index]].array
         self.__target_name = config['target']
         return True
- 
+
     def load_from_mysql(self, config):
         raise NotImplemented
 
@@ -124,14 +127,14 @@ class dhandle:
         if config['target'] is None:
             print("config must have 'target'")
             return False
-        
+
         if config['method'] == 'excel':
             return self._load_from_excel(config)
         elif config['method'] == 'mysql':
             return self.load_from_mysql(config)
         else:
-            raise ValueError("method:{} not supported".format(config['method']))
-        
+            raise ValueError(
+                "method:{} not supported".format(config['method']))
 
     def predict(self, parameters):
         '''
@@ -141,12 +144,12 @@ class dhandle:
         src = self.__pca.transform(parameters)
         # use linearRegression module to predict the target value
         return self.__lr.predict(src)
-    
+
     def parameter_names(self):
         '''
         return all parameters' key word
         '''
-        return [ item.name for item in self.__cols]
+        return [item.name for item in self.__cols]
 
     def train(self, test_ratio=0.5, target_RMSE=1e6):
         '''
@@ -173,7 +176,8 @@ class dhandle:
         while RMSE > target_RMSE:
             # get test data randomly based on sklearn module
             # see https://blog.csdn.net/fxlou/article/details/79189106
-            x_train, x_test, y_train, y_test = train_test_split(src, target, test_size=test_ratio)
+            x_train, x_test, y_train, y_test = train_test_split(
+                src, target, test_size=test_ratio)
             # use poly metho to fit(PolynomialFeatures=1 mean linear fitting)
             # see https://blog.csdn.net/hushenming3/article/details/80500364
             lr = pl.make_pipeline(sp.PolynomialFeatures(1), LinearRegression())
@@ -187,7 +191,6 @@ class dhandle:
         # storage result
         self.__RMSE = RMSE
         self.__lr = lr
-
 
     def printInfo(self):
         cols = self.__cols
@@ -207,4 +210,3 @@ class dhandle:
         plt.plot(range(len(target)), target, 'b', label='target')
         plt.plot(range(len(pre_target)), pre_target, 'r', label='predict')
         plt.show()
-

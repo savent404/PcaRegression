@@ -2,9 +2,9 @@
     "method": "mysql",
     "host": "127.0.0.1",
     "port": 3306,
-    "user": "demo",
-    "password": "123456",
-    "databse": "db",
-    "table": "table1",
-    "target": "target"
+    "user": "root",
+    "password": "123",
+    "database": "demo",
+    "table": "table",
+    "target": "k1"
 }

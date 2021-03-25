@@ -12,6 +12,21 @@ import json
 # data loader
 import lib.data_loader as dl
 
+def valueColor(value):
+    '''
+    see https://blog.csdn.net/claroja/article/details/79459596
+    '''
+    if value > 50e5:
+        return 'red'
+    elif value > 5e5:
+        return 'orange'
+    elif value > -5e5:
+        return 'olive'
+    elif value > -50e5:
+        return 'yellowgreen'
+    else:
+        return 'g'
+
 
 class dhandle:
     def __init__(self):
@@ -156,9 +171,33 @@ class dhandle:
         target = np.array(self.target_data)
         # use self.predict to predict target values
         pre_target = self.predict(self.feature_data)
+        # pca data
+        pca_data = self.module['pca'].transform(self.feature_data)
 
         # print figure using matplot
         # see https://www.runoob.com/numpy/numpy-matplotlib.html
-        plt.plot(range(len(target)), target, 'b', label='target')
-        plt.plot(range(len(pre_target)), pre_target, 'r', label='predict')
+
+
+        fig = plt.figure(figsize=plt.figaspect(3,))
+        fig.suptitle('')
+
+        ax1 = fig.add_subplot(3, 1, 1)
+        ax2 = fig.add_subplot(3, 1, 2, projection='3d')
+        ax3 = fig.add_subplot(3, 1, 3, projection='3d')
+
+        for i in range(0, len(pre_target)):
+            ax2.plot(pca_data[i][0], pca_data[i][1], pca_data[i][2], c=valueColor(pre_target[i]), marker='.')
+            ax3.plot(pca_data[i][0], pca_data[i][1], pca_data[i][2], c=valueColor(target[i]), marker='v')
+        ax2.set_xlabel('PCA 1th')
+        ax2.set_ylabel('PCA 2th')
+        ax2.set_zlabel('PCA 3th')
+        ax2.legend()
+
+        ax3.set_xlabel('PCA 1th')
+        ax3.set_ylabel('PCA 2th')
+        ax3.set_zlabel('PCA 3th')
+
+        ax1.plot(range(len(target)), target, 'b', label='target')
+        ax1.plot(range(len(pre_target)), pre_target, 'r', label='predict')
         plt.show()
+

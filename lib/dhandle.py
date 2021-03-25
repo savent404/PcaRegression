@@ -111,7 +111,7 @@ class dhandle:
         '''
         return self.feature_names
 
-    def train(self, test_ratio=0.5, target_RMSE=1e6):
+    def train(self, test_ratio=0.5, target_score=0.99):
         '''
         use pca and lr to predict
         '''
@@ -132,9 +132,9 @@ class dhandle:
         see https://blog.csdn.net/weixin_39739342/article/details/93379653
         @note if RMSE higher than we think, get test data randomly again and try to get a better score
         '''
-        RMSE = None
+        SCORE = None
         loop_cnt = 0
-        while RMSE is None or RMSE > target_RMSE:
+        while SCORE is None or SCORE < target_score:
             # get test data randomly based on sklearn module
             # see https://blog.csdn.net/fxlou/article/details/79189106
             x_train, x_test, y_train, y_test = train_test_split(
@@ -147,16 +147,18 @@ class dhandle:
 
             # measure error
             y_pred = lr.predict(x_test)
+            SCORE = lr.score(x_test, y_test)
             RMSE = np.sqrt(metrics.mean_squared_error(y_test, y_pred))
 
             loop_cnt = loop_cnt + 1
             if (loop_cnt > 1e3):
-                target_RMSE = target_RMSE * 1.1
+                target_score = target_score * 0.9
                 loop_cnt = 0
-                print("target RMSE is too small, adjust to {}...".format(target_RMSE))
+                print("target SCORE is too big , adjust to {}...".format(target_score))
 
         # storage result
         self.debug_info['RMSE'] = RMSE
+        self.debug_info['SCORE'] = SCORE
         self.module['lr'] = lr
 
     def printInfo(self):
@@ -164,9 +166,13 @@ class dhandle:
         print("source key words:{}".format(self.feature_names))
         print('target key words:{}'.format(self.target_name))
         print("RMSE:{}".format(self.debug_info['RMSE']))
-        print("pca ratio:{}".format(
+        print('lr score:', self.debug_info['SCORE'])
+        print("pca explained variance:", self.module['pca'].explained_variance_)
+        print("pca explained variance ratio:{}".format(
             self.module['pca'].explained_variance_ratio_))
 
+        print('pca components:', self.module['pca'].components_)
+        print('lr parameters:', vars(self.module['lr'][1]))
         # convert data type from pandas array to numpy array
         target = np.array(self.target_data)
         # use self.predict to predict target values
@@ -191,7 +197,6 @@ class dhandle:
         ax2.set_xlabel('PCA 1th')
         ax2.set_ylabel('PCA 2th')
         ax2.set_zlabel('PCA 3th')
-        ax2.legend()
 
         ax3.set_xlabel('PCA 1th')
         ax3.set_ylabel('PCA 2th')

@@ -1,5 +1,5 @@
-from gui import MainWindow  # self defined GUI widget
-from dhandle import dhandle  # data train/predict obj
+from lib.gui import MainWindow  # self defined GUI widget
+from lib.dhandle import dhandle  # data train/predict obj
 
 import os.path
 import sys  # system input args

@@ -65,7 +65,7 @@ def from_excel(file="./demo.xlsx", target="k1"):
                 raise ValueError("target can't has NaN item")
             else:
                 target_index = i
-                continue
+            continue
         if hasInvalidValue(data[data.columns[i]]) is False:
             d = data[data.columns[i]]
             cols.append(d)
@@ -82,7 +82,7 @@ def from_excel(file="./demo.xlsx", target="k1"):
     for i in range(valid_cols):
         source[:, i] = cols[i].array
     feature_data = source
-    feature_names = [item for item in data]
+    feature_names = [item.name for item in cols]
     target_data = data[data.columns[target_index]].array
     return feature_data, feature_names, target_data
 

@@ -10,7 +10,7 @@ from os import path
 import json
 
 # data loader
-import data_loader as dl
+import lib.data_loader as dl
 
 
 class dhandle:
@@ -135,8 +135,9 @@ class dhandle:
             RMSE = np.sqrt(metrics.mean_squared_error(y_test, y_pred))
 
             loop_cnt = loop_cnt + 1
-            if (loop_cnt > 50):
+            if (loop_cnt > 1e3):
                 target_RMSE = target_RMSE * 1.1
+                loop_cnt = 0
                 print("target RMSE is too small, adjust to {}...".format(target_RMSE))
 
         # storage result

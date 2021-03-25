@@ -1,5 +1,5 @@
 {
     "method": "excel",
-    "file": "./d2.xlsx",
+    "file": "database/d2.xlsx",
     "target": "净利润"
 }

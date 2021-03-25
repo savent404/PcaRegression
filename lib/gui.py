@@ -1,6 +1,5 @@
 from PyQt5.QtWidgets import *
 import numpy as np
-import sys
 
 
 class InputItem(QWidget):

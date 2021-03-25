@@ -122,6 +122,7 @@ def from_mysql(host='localhost', port=3306, user='user', passwd='123', database=
         # get feature number
         cols = len(data[0])
         data = np.reshape(data, (-1, cols))
+        data = np.float64(data)
 
         if target not in col_names:
             print('target({}) not in col_names({})'.format(
@@ -154,5 +155,5 @@ def from_mysql(host='localhost', port=3306, user='user', passwd='123', database=
         return None
     except:
         print("unknow error")
-        return None
+        raise
     

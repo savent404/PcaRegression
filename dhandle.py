@@ -117,8 +117,9 @@ class dhandle:
         see https://blog.csdn.net/weixin_39739342/article/details/93379653
         @note if RMSE higher than we think, get test data randomly again and try to get a better score
         '''
-        RMSE = 1e100
-        while RMSE > target_RMSE:
+        RMSE = None
+        loop_cnt = 0
+        while RMSE is None or RMSE > target_RMSE:
             # get test data randomly based on sklearn module
             # see https://blog.csdn.net/fxlou/article/details/79189106
             x_train, x_test, y_train, y_test = train_test_split(
@@ -132,6 +133,11 @@ class dhandle:
             # measure error
             y_pred = lr.predict(x_test)
             RMSE = np.sqrt(metrics.mean_squared_error(y_test, y_pred))
+
+            loop_cnt = loop_cnt + 1
+            if (loop_cnt > 50):
+                target_RMSE = target_RMSE * 1.1
+                print("target RMSE is too small, adjust to {}...".format(target_RMSE))
 
         # storage result
         self.debug_info['RMSE'] = RMSE

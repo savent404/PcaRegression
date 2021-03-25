@@ -5,6 +5,6 @@
     "user": "root",
     "password": "123",
     "database": "demo",
-    "table": "table",
-    "target": "k1"
+    "table": "d2",
+    "target": "C1"
 }

@@ -80,7 +80,7 @@ class dhandle:
             return False
         # load config.json
         # see https://www.runoob.com/python/python-json.html
-        with open(config_file, 'r') as f:
+        with open(config_file, 'r', encoding='utf-8') as f:
             config = json.load(f)
 
         # must have 'target' in anyway

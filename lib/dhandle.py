@@ -173,6 +173,9 @@ class dhandle:
 
         print('pca components:', self.module['pca'].components_)
         print('lr parameters:', vars(self.module['lr'][1]))
+        print('full matrix:', self.module['pca'].components_.T.dot(
+            self.module['lr'][1].coef_[1::1]
+        ))
         # convert data type from pandas array to numpy array
         target = np.array(self.target_data)
         # use self.predict to predict target values
